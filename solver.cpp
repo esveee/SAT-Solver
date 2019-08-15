@@ -7,16 +7,14 @@
 
 using namespace std;
 
-/*
- * enum for different types of return flags defined
- */
+
 enum Cat {
-  satisfied,   // when a satisfying assignment has been found
-  unsatisfied, // when no satisfying assignment has been found after
+  satisfied,    // when a satisfying assignment has been found
+  unsatisfied,  // when no satisfying assignment has been found after
                // exhaustively searching
-  normal,   // when no satisfying assignment has been found till now, and DPLL()
-            // has exited normally
-  completed // when the DPLL algorithm has completed execution
+  normal,      // when no satisfying assignment has been found till now, and DPLL()
+               // has exited normally
+  completed   // when the DPLL algorithm has completed execution
 };
 
 /*
@@ -43,7 +41,7 @@ public:
   vector<vector<int>> clauses;
   Formula() {}
 
-  // copy constructor for copying a formula - each member is copied over
+
   Formula(const Formula &f) {
     literals = f.literals;
     clauses = f.clauses;
@@ -148,24 +146,22 @@ int SATSolverDPLL::unit_propagate(Formula &f) {
   do {
     unit_clause_found = false;
     // iterate over the clauses in f
-    for (int i = 0; i < f.clauses.size(); i++) {
-      if (f.clauses[i].size() ==
-          1) // if the size of a clause is 1, it is a unit clause
+    for (int i = 0; i < f.clauses.size(); i++)
+    {
+      if (f.clauses[i].size() == 1) // if the size of a clause is 1, it is a unit clause
       {
         unit_clause_found = true;
-        f.literals[f.clauses[i][0] / 2] =
-            f.clauses[i][0] % 2; // 0 - if true, 1 - if false, set the literal
-        f.literal_frequency[f.clauses[i][0] / 2] =
-            -1; // once assigned, reset the frequency to mark it closed
-        int result = apply_transform(f, f.clauses[i][0] /
-                                            2); // apply this change through f
+        f.literals[f.clauses[i][0] / 2] =  f.clauses[i][0] % 2; // 0 - if true, 1 - if false, set the literal
+        f.literal_frequency[f.clauses[i][0] / 2] =  -1; // once assigned, reset the frequency to mark it closed
+        int result = apply_transform(f, f.clauses[i][0] /  2); // apply this change through f
         // if this caused the formula to be either satisfied or unsatisfied,
         // return the result flag
         if (result == Cat::satisfied || result == Cat::unsatisfied) {
           return result;
         }
         break; // exit the loop to check for another unit clause from the start
-      } else if (f.clauses[i].size() == 0) // if a given clause is empty
+      }
+      else if (f.clauses[i].size() == 0) // if a given clause is empty
       {
         return Cat::unsatisfied; // the formula is unsatisfiable in this branch
       }
